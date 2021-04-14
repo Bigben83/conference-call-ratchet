@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Multi-User Video Call</title>
 
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.4.0/adapter.js" integrity="sha512-cStunnoagt9q/MjYiis6uo389MjN5T7GN3x5L+zWQkEy6YlPdwyZOggFUcEBNmWvr5P/58KAIDroEEdxyqTboQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" integrity="sha512-Qlv6VSKh1gDKGoJbnyA5RMXYcvnpIqhO++MhIM2fStMcGT9i2T//tSwYFlcyoRRDcDZ+TYHpH8azBBCyhpSeqw==" crossorigin="anonymous"></script>
+        
         <link rel='stylesheet' href='assets/css/app.css' type="text/css">
-
         <script type="module" src='assets/js/chat.js'></script>
         <script type="module" src='assets/js/events.js'></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.3.0/adapter.min.js" integrity="sha256-2qQheewaqnZlXJ3RJRghVUwD/3fD9HNqxh4C+zvgmF4=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js'></script>
+        
+        <!-- Clock Picker Scripts -->
+        <script src="assets/js/jquery-clockpicker.min.js"></script>
+        <link rel="stylesheet" href="assets/css/jquery-clockpicker.min.css" />
+
+        <!-- Whiteboard Script -->
+        <script src="assets/js/whiteboard.js"></script>
+
+        <!-- Additional Scripting -->
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <script src='assets/js/additional.js'></script>
+        
     </head>
 
     <body>
@@ -37,17 +57,10 @@
         </div>
         
         
-        <nav class="navbar fixed-top bg-info rounded-0 d-print-none">
+        <nav class="navbar fixed-top bg-danger rounded-0 d-print-none sticky-top">
             <div class="text-white">Video Call</div>
 
             <div class="pull-right room-comm" hidden>
-                <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-video' title="Hide Video">
-                    <i class="fa fa-video text-white"></i>
-                </button>
-
-                <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-mute' title="Mute">
-                    <i class="fa fa-microphone-alt text-white"></i>
-                </button>
 
                 <button class="btn btn-sm rounded-0 btn-no-effect" id='share-screen' title="Share screen">
                     <i class="fa fa-desktop text-white"></i>
@@ -61,11 +74,52 @@
                     <i class="fa fa-comment"></i> <span class="badge badge-danger very-small font-weight-lighter" id='new-chat-notification' hidden>New</span>
                 </button>
 
-                <button class="btn btn-sm rounded-0 btn-no-effect text-white">
-                    <a href="/" class="text-white text-decoration-none"><i class="fa fa-sign-out-alt text-white" title="Leave"></i></a>
-                </button>
             </div>
         </nav>
+        
+        <div class="container-fluid" style="z-index:1050;position: relative;">
+            <div class="row align-items-start justify-content-end px-3 room-comm" hidden>
+                <div class="col-1 text-left pl-0 dropdown">
+
+                    <div class="my-2">
+                        <button type="button" class="btn text-white" id="door-bell" onclick="doorbell()" value="Door Bell" >
+                            <i id="ringDB" class="fas fa-bell fa-4x"></i>
+                        </button>
+                    </div>
+                    <div class="my-2">
+                        <button class="btn btn-success rounded-circle" id='toggle-mute' title="Mute">
+                            <i id="audio-icons" class="fas fa-2x m-1 p-2 fa-microphone"></i>
+                        </button>
+                    </div>
+                    <div class="my-2">
+                        <button type="button" class="btn btn-primary rounded-circle" id="virtual-whiteboard" value="Virtual Whiteboard" data-backdrop="false" data-toggle="modal" data-target=".virtual-whiteboard-modal-xl">
+                            <i class="fas fa-pencil-alt fa-2x py-1 m-2"></i>
+                        </button>
+                    </div>
+
+                    <div class="my-2">
+                        <button type="button" class="btn btn-success rounded-circle" id='toggle-video' title="Hide Video">
+                            <i id="video-icons" class="fas fa-video fa-2x py-2 m-2"></i>
+                        </button>
+                    </div>
+
+                    <div class="my-2">
+                        <button class="btn btn-danger rounded-circle">
+                            <a href="/" class="text-white text-decoration-none"><i class="fas fa-phone-slash fa-2x py-2 m-1" title="Leave"></i></a>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="col text-center"></div>
+
+                <div class="col-2 text-right text-dark px-0">
+                    <h3 id="session-title" class="mb-0"></h3>
+                    <h3 id="session-name" class="my-0"></h3>
+                    <h1 id="datetime" class="mt-0"></h1>
+                    <h5 id="audio-status" class="mb-0">Your Audio is on</h5>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid" id='room-create' hidden>
             <div class="row">
@@ -143,5 +197,147 @@
                 </div>
             </div>
         </div>
+        
+        <!-- WHITEBOARD SETTINGS -->
+        <div class="modal fade" id="whiteboard-settings" tabindex="-1" role="dialog" aria-labelledby="whiteboard-settings" aria-hidden="true" style="z-index:2000;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Whiteboard Settings</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WHITEBOARD -->
+        <div class="whiteboard modal fade virtual-whiteboard-modal-xl" tabindex="-1" role="dialog" aria-labelledby="virtual-whiteboard" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-x1">
+                <div class="modal-content">
+                    <div class="canvas-container" id="canvas-container">
+                        <div class="btn-group whiteboard-button">
+                            <button type="button" class="btn rounded-circle btn-transparent text-white pl-2" onclick="wb1.clean();"><i class="fas fa-eraser fa-2x"></i></button>
+
+                            <button type="button" class="btn rounded-circle btn-dark m-1 p-4" onclick="wb1.options.strokeStyle='black'"></button>
+                            <button type="button" class="btn rounded-circle btn-danger m-1 p-4" onclick="wb1.options.strokeStyle='red'"></button>
+                            <button type="button" class="btn rounded-circle btn-success m-1 p-4" onclick="wb1.options.strokeStyle='green'"></button>
+                            <button type="button" class="btn rounded-circle btn-primary m-1 p-4" onclick="wb1.options.strokeStyle='blue'"></button>
+                            <button type="button" class="btn rounded-circle btn-warning m-1 p-4" onclick="wb1.options.strokeStyle='orange'"></button>
+
+                            <a id="download" download="screenshot-<?php echo date('dmY'); ?>.jpg">
+                                <button type="button" class="btn rounded-circle btn-transparent text-dark pl-2" onClick="download()"><i class="fas fa-download fa-2x"></i></button>
+                            </a>
+
+                        </div>
+                        <div class="">
+                            <!-- Note that the id of our canvas is #myCanvas -->
+                            <canvas class="transparent-canvas" id="whiteboard" width="900" height="400">Sorry, your browser doesn't support the &lt;canvas&gt; element.</canvas>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary pb-4 pl-4 pt-5 pr-5 whiteboard-open">
+                                <span aria-hidden="true"><i class="fas fa-check fa-2x"></i></span>
+                            </button>
+                            <button type="button" class="bottom-align-text btn btn-secondary pb-4 pr-4 pt-5 pl-5 whiteboard-close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fas fa-times fa-2x"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="fixed-bottom mt-auto py-3">
+            <div class="container">
+                <div class="mx-auto text-muted text-center">2021 - Bison Constructions Pty Ltd.</div>
+            </div>
+        </footer>
+        
+        <script type="text/javascript">
+            // Tooltips Initialization
+            $(function() {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
+            function download() {
+                var download = document.getElementById("download");
+                var image = document.getElementById("whiteboard").toDataURL("image/jpg")
+                .replace("image/jpg", "image/octet-stream");
+                download.setAttribute("href", image);
+                //download.setAttribute("download","archive.jpg");
+            }
+
+            'use strict';
+
+            var wb1 = new Whiteboard('whiteboard', wb1_bufferHandler, {
+                globalAlpha: 0.75
+            });
+
+            function wb1_bufferHandler(buff, opt) {
+                opt.strokeStyle = '#fff';
+                opt.lineWidth = 1;
+            }
+
+            function wb2_bufferHandler(buff, opt) {
+                gradient.addColorStop('0', 'magenta');
+                gradient.addColorStop('0.25', 'blue');
+                gradient.addColorStop('0.50', 'red');
+                gradient.addColorStop('0.75', 'yellow');
+                gradient.addColorStop('1', 'green');
+
+                opt.strokeStyle = gradient;
+                wb1.draw(buff, opt);
+                opt.lineWidth = 30;
+            }
+        </script>
+
+        <script type="text/javascript">
+            //Show time over video
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                var ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12;
+                h = h ? h : 12; // the hour ’0′ should be ’12′
+                // add a zero in front of numbers<10
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('datetime').innerHTML = h + ":" + m + ' ' + ampm;
+                //document.getElementById('remote-time').innerHTML = h + ":" + m+ ' ' + ampm;
+                t = setTimeout(function() {
+                    startTime()
+                }, 500);
+            }
+            startTime();
+
+            document.getElementById('session-title').innerHTML = sessionStorage.getItem('roomName');
+            document.getElementById('session-name').innerHTML = sessionStorage.getItem('username');
+
+        </script>
     </body>
 </html>

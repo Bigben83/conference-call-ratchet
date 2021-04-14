@@ -4,7 +4,7 @@
  */
 import h from './helpers.js';
 
-const wsUrl = 'ws://localhost:8080';
+const wsUrl = 'wss://vc.bisonconstructions.com.au:8555';
 var servers = {
     iceServers: []
 }

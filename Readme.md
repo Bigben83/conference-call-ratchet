@@ -1,6 +1,19 @@
 # Conference Call
 A conference call implementation using WebRTC, [Ratchet Web Socket](https://github.com/ratchetphp/Ratchet).
 
+## Updated the following
+Latest version of the following
+- Bootstrap
+- socket.io.js
+- adapter.js
+- moment.min.js
+- FileSaver.js
+
+
+## Included additional features
+- Whiteboard Share
+- Make more touch screen friendly
+
 
 # Getting Started
 - Run `composer install` to install the dependencies.

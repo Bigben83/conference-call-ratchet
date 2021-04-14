@@ -1,2 +1,7 @@
 /Server.php
 /vendor/
+/.user.ini
+/php.ini
+/.well-known
+/archived_files/
+/.htaccess
